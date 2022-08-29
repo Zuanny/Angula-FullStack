@@ -15,7 +15,7 @@ const schemaCadastroVeiculos = yup.object().shape({
 const schemaAtualizarVeiculos = yup.object().shape({
     vin: yup.string(),
     odometer: yup.number(),
-    tirePressure: yup.number(),
+    tirePressure: yup.string(),
     status: yup.string(),
     batteryStatus: yup.string(),
     nivel_combustivel: yup.number(),
