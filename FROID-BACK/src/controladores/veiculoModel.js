@@ -28,8 +28,28 @@ const listarModeloVeiculosId = async (req, res) => {
 }
 
 const cadastrarModeloVeiculo = async (req, res) => {
+ let  {model,
+  volumeTotal,
+  connected,
+  softwareUpdates} = req.body
+
+  if(connected > volumeTotal){
+    return res.status(400).json({mensagem: error.message = 'Não é permitido ter mais veiculos conectados do que vendidos.'})
+  }
+  if(softwareUpdates > volumeTotal){
+    return res.status(400).json({mensagem: error.message = 'Não é permitido ter mais veiculos Atualizados do que vendidos.'})
+  }
   try {
     await schemaCadastroModeloVeiculos.validate(req.body);
+    if (model) {
+      const veiculoModel = await knex('vehicle')
+      .where({ model })
+      .select('*')
+      .first()
+        if(veiculoModel){
+          return res.status(403).json({mensagem: 'Já existe um veiculo cadastrado com esse model'})
+        }
+    }
   } catch (error) {
     return res.status(400).json({ mensagem: error.message })
   }
@@ -54,8 +74,17 @@ const cadastrarModeloVeiculo = async (req, res) => {
 
 const editarModeloVeiculo= async (req, res) => {
   let { id } = req.params;
-  let { model } = req.body;
-
+  let  {model,
+    volumeTotal,
+    connected,
+    softwareUpdates} = req.body
+    let error = {}
+    if(connected > volumeTotal){
+      return res.status(400).json({mensagem: error.message = 'Não é permitido ter mais veiculos conectados do que vendidos.'})
+    }
+    if(softwareUpdates > volumeTotal){
+      return res.status(400).json({mensagem: error.message = 'Não é permitido ter mais veiculos Atualizados do que vendidos.'})
+    }
   try {
     await schemaAtualizarModeloVeiculos.validate(req.body);
     let modeloVeiculo = {...req.body}

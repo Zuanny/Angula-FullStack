@@ -30,6 +30,11 @@ const listarVeiculosId = async (req, res) => {
 }
 
 const cadastrarVeiculo = async (req, res) => {
+  let {fuelLevel} =req.body
+  if(fuelLevel > 100){
+    let error = {}
+    return res.status(400).json({mensagem: error.mensagem = 'O maximo é 100%'})
+  }
   try {
     await schemaCadastroVeiculos.validate(req.body);
   } catch (error) {
@@ -57,15 +62,12 @@ const cadastrarVeiculo = async (req, res) => {
 const editarVeiculo= async (req, res) => {
   let { id } = req.params;
   let {
-    vin,
-    pressao_pneu,
-    status_veiculo,
-    status_bateria,
-    nivel_combustivel,
-    latitude,
-    longitude
+   fuelLevel
 } = req.body;
-
+if(fuelLevel > 100){
+  let error = {}
+  return res.status(400).json({mensagem: error.mensagem = 'O maximo é 100%'})
+}
   
   let Veiculo = {...req.body}
  

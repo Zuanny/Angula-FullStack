@@ -5,7 +5,9 @@ const { schemaCadastroUsuario, schemaAtualizarUsuario } = require('../validacoes
 
 const listarUsarios = async (req, res) => {
     try {
-        let usuarios = await knex('user').select('id','name','email','full_name','join_date');
+        // let usuarios = await knex('user').select('id','name','email','full_name','join_date');
+        let usuarios = await knex('user').select(knex.raw('id , name, email,full_name, DATE_FORMAT(join_date, "%d/%m/%Y")as join_date')  );
+        
     return res.status(200).json(usuarios)
     } catch (error) {
         return res.status(500).json({mensagem: error.message})
@@ -16,7 +18,7 @@ const listarUsarios = async (req, res) => {
 const listarUsarioId = async (req, res) => {
     let {id} = req.params
     try {
-        let usuario = await knex('user').where({id}).first();
+        let usuario = await knex('user').select('name','email','full_name','join_date').where({id}).first();
         if(!usuario){
             return res.status(404).json({mensagem: "Não existe usuário cadastrado com esse id"})
         }
